@@ -1,0 +1,5 @@
+- name: Make sure host is updated
+  hosts: all
+  become: yes
+  roles:
+    - k8s-prerequisites
