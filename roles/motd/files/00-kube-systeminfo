@@ -1,0 +1,8 @@
+#!/bin/env bash
+tabs 4
+echo "WELCOME@$(hostname)"
+echo ""
+
+ip -o addr | awk 'BEGIN{print "INTERFACE ADD"; print "----- -----"} {split($4, a, "/"); print $2" "a[1]}' | column -t -o " | " | sed 's/^/\t/'
+
+echo ""

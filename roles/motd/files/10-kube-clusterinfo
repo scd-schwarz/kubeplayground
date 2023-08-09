@@ -1,0 +1,15 @@
+#!/bin/bash
+tabs 4
+echo "KUBERNETES CLUSTERINFO"
+echo ""
+
+
+kubectl get componentstatuses > /dev/null 2>&1
+if [ $? -eq 0 ]; then
+    echo -e "\tif i wasn't lazy print info about the cluster"
+else
+    echo -e "\tseems like cluster is not up"
+    echo -e "\tkubectl get componentsatatus ended with rc != 0"
+fi
+
+echo ""

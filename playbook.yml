@@ -1,5 +1,20 @@
-- name: Make sure host is updated
+- name: Make sure host is updated and configured
   hosts: all
   become: yes
   roles:
+    - motd
     - k8s-prerequisites
+
+- name: test control plane node difference
+  hosts: control_plane
+  become: yes
+  tasks:
+    - ansible.builtin.debug:
+        msg: "system {{ inventory_hostname  }}"
+
+- name: test worker node difference
+  hosts: worker_nodes
+  become: yes
+  tasks:
+    - ansible.builtin.debug:
+        msg: "system {{ inventory_hostname }}"
