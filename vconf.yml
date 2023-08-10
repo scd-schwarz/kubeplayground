@@ -1,0 +1,5 @@
+---
+os: "ubuntu/jammy64"
+master_memory: 4096
+workers: 2
+worker_memory: 1024
