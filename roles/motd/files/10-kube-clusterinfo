@@ -3,13 +3,9 @@ tabs 4
 echo "KUBERNETES CLUSTERINFO"
 echo ""
 
-
-kubectl cluster-info > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-    echo -e "\tif i wasn't lazy print info about the cluster"
+CHECKFILE=/etc/kubernetes/pki/ca.key
+if [ -f "CHECKFILE" ]; then
+    kubectl get nodes
 else
-    echo -e "\tseems like cluster is not up"
-    echo -e "\tkubectl get componentsatatus ended with rc != 0"
+    echo "$CHECKFILE not present, cluster probably not running"
 fi
-
-echo ""

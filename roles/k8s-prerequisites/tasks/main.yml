@@ -1,4 +1,15 @@
 ---
+- name: ensure swap is disabled for current session
+  command: swapoff -a
+  become: true
+
+- name: ensure swap is disabled persistently
+  replace:
+    path: /etc/fstab
+    regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
+    replace: '#\1\2\3swap\4'
+    backup: yes
+
 - name: ensure containerd runtime is available
   ansible.builtin.apt:
     name: "containerd={{ containerd_version }}-0ubuntu1~22.04.1"

@@ -1,0 +1,7 @@
+---
+- name: join cluster
+  become: yes
+  shell: |
+    kubeadm join --token {{ kubeadm_token }} \
+      --discovery-token-unsafe-skip-ca-verification \
+      {{ master_ip }}:6443
