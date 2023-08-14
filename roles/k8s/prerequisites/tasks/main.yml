@@ -1,7 +1,6 @@
 ---
 - name: Ensure swap is disabled for current session
   ansible.builtin.command: swapoff -a
-  become: true
 
 - name: Ensure swap is disabled persistently
   ansible.builtin.replace:

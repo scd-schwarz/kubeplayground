@@ -1,6 +1,5 @@
 ---
 - name: Init k8s cluster
-  become: true
   ansible.builtin.shell: |
     kubeadm init --token {{ kubeadm_token }} \
       --apiserver-advertise-address {{ master_ip }} \
