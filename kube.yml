@@ -1,14 +1,14 @@
 ---
-- name: test control plane node difference
+- name: Test control plane node difference
   hosts: control_plane
-  become: yes
+  become: true
   roles:
     - k8s/prerequisites
     - k8s/controlplane
 
-- name: test worker node difference
+- name: Test worker node difference
   hosts: worker_nodes
-  become: yes
+  become: true
   roles:
     - k8s/prerequisites
     - k8s/worker

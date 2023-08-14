@@ -1,61 +1,61 @@
 ---
-- name: ensure swap is disabled for current session
-  command: swapoff -a
+- name: Ensure swap is disabled for current session
+  ansible.builtin.command: swapoff -a
   become: true
 
-- name: ensure swap is disabled persistently
-  replace:
+- name: Ensure swap is disabled persistently
+  ansible.builtin.replace:
     path: /etc/fstab
     regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
     replace: '#\1\2\3swap\4'
-    backup: yes
+    backup: true
 
-- name: ensure br_netfilter is available and persistent
+- name: Ensure br_netfilter is available and persistent
   community.general.modprobe:
     name: br_netfilter
     state: present
     persistent: present
 
-- name: ensure br_netfilter settings are set and persistent
+- name: Ensure br_netfilter settings are set and persistent
   ansible.posix.sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
-    sysctl_set: yes
+    sysctl_set: true
     state: present
-    reload: yes
+    reload: true
   with_items:
     - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
     - { name: 'net.bridge.bridge-nf-call-ip6tables', value: '1' }
     - { name: 'net.ipv4.ip_forward', value: '1'}
 
-- name: ensure overlay is available and present
+- name: Ensure overlay is available and present
   community.general.modprobe:
     name: overlay
     state: present
     persistent: present
 
-- name: ensure google cloud gpg key is present
+- name: Ensure google cloud gpg key is present
   ansible.builtin.get_url:
     url: "{{ gc_gpg_keysource }}"
     dest: "{{ gc_gpg_keystore }}"
     mode: '0644'
     force: true
 
-- name: ensure kubernetes apt repo is present
+- name: Ensure kubernetes apt repo is present
   ansible.builtin.apt_repository:
     repo: "deb [signed-by={{ gc_gpg_keystore }}] {{ kubernetes_apt_repo }} kubernetes-xenial main"
     state: present
 
-- name: ensure all required kube tools are present
+- name: Ensure all required kube tools are present
   ansible.builtin.apt:
     name:
       - kubelet
       - kubeadm
       - kubectl
     state: present
-    update_cache: yes
+    update_cache: true
 
-- name: ensure all required kube tools are held
+- name: Ensure all required kube tools are held
   ansible.builtin.dpkg_selections:
     name: "{{ item }}"
     selection: hold

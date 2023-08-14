@@ -1,22 +1,25 @@
 ---
-- name: ensure containerd runtime is available
+- name: Ensure containerd runtime is available
   ansible.builtin.apt:
     name: "containerd={{ containerd_version }}-0ubuntu1~22.04.1"
     state: present
-    update_cache: yes
+    update_cache: true
 
-- name: ensure containerd config path is present
+- name: Ensure containerd config path is present
   ansible.builtin.file:
     path: /etc/containerd
     state: directory
     mode: '0755'
 
-- name: ensure custom containerd config is present
+- name: Ensure custom containerd config is present
   ansible.builtin.copy:
     src: config.toml
     dest: /etc/containerd/config.toml
+    owner: root
+    group: root
+    mode: "0755"
   notify:
-  - restart containerd
+    - Restart containerd
 
-- name: flush handlers
-  meta: flush_handlers
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers

@@ -1,6 +1,6 @@
 ---
-- name: join cluster
-  become: yes
+- name: Join cluster
+  become: true
   shell: |
     kubeadm join --token {{ kubeadm_token }} \
       --discovery-token-unsafe-skip-ca-verification \

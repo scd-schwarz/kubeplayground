@@ -1,38 +1,43 @@
 ---
-- name: init k8s cluster
-  become: yes
+- name: Init k8s cluster
+  become: true
   ansible.builtin.shell: |
     kubeadm init --token {{ kubeadm_token }} \
       --apiserver-advertise-address {{ master_ip }} \
       --pod-network-cidr {{ pod_network_cidr }}
 
-- name: make sure kuberenetes config dir is present
+- name: Make sure kuberenetes config dir is present
   ansible.builtin.file:
     path: ".kube/"
     state: directory
+    owner: vagrant
+    group: vagrant
+    mode: "0755"
 
-- name: copy admin.conf to home
+- name: Copy admin.conf to home
   ansible.builtin.copy:
     src: /etc/kubernetes/admin.conf
     dest: ".kube/config"
     owner: vagrant
     group: vagrant
-    mode: 0755
+    mode: "0755"
     remote_src: true
 
-- name: ensure object dir is present
+- name: Ensure object dir is present
   ansible.builtin.file:
     path: /home/vagrant/kubeobjects
     state: directory
     owner: vagrant
     group: vagrant
+    mode: "0755"
 
-- name: ensure network yml is present
+- name: Ensure network yml is present
   ansible.builtin.template:
     src: calico.yml.j2
     dest: /home/vagrant/kubeobjects/calico.yml
     owner: vagrant
     group: vagrant
+    mode: "0755"
 
-- name: ensure cni is present
+- name: Ensure cni is present
   ansible.builtin.command: kubectl apply -f /home/vagrant/kubeobjects/calico.yml

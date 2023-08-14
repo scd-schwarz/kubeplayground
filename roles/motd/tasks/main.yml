@@ -1,19 +1,19 @@
 ---
-- name: find all non kube motd files
+- name: Find all non kube motd files
   ansible.builtin.find:
     paths: /etc/update-motd.d
-    recurse: no
+    recurse: false
     file_type: any
     excludes: '[0-9][0-9]-kube*'
   register: motd_found
 
-- name: ensure non kube motd files are gone
+- name: Ensure non kube motd files are gone
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent
   with_items: "{{ motd_found.files }}"
 
-- name: ensure custom motd files are present
+- name: Ensure custom motd files are present
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: /etc/update-motd.d
