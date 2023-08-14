@@ -4,8 +4,7 @@
   become: yes
   roles:
     - motd
-    - k8s-prerequisites
+    - containerd
 
 - name: run kube cluster
   ansible.builtin.import_playbook: kube.yml
-

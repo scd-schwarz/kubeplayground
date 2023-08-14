@@ -13,6 +13,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "kube-master" do |master|
     master.vm.provider "virtualbox" do |vb|
       vb.memory = vconf['master_memory']
+      vb.cpus = 2
     end
 
     master.vm.box = "ubuntu/jammy64"
