@@ -1,6 +1,10 @@
 ---
 - name: Ensure swap is disabled for current session
-  ansible.builtin.command: swapoff -a
+  ansible.builtin.command: swapoff -a -v
+  register: swapoff_result
+  changed_when:
+    - swapoff_result.rc == 0
+    - '"swapoff" in swapoff_result.stdout'
 
 - name: Ensure swap is disabled persistently
   ansible.builtin.replace:
@@ -9,56 +13,56 @@
     replace: '#\1\2\3swap\4'
     backup: true
 
-- name: Ensure br_netfilter is available and persistent
-  community.general.modprobe:
-    name: br_netfilter
-    state: present
-    persistent: present
+# - name: Ensure br_netfilter is available and persistent
+#   community.general.modprobe:
+#     name: br_netfilter
+#     state: present
+#     persistent: present
 
-- name: Ensure br_netfilter settings are set and persistent
-  ansible.posix.sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    sysctl_set: true
-    state: present
-    reload: true
-  with_items:
-    - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
-    - { name: 'net.bridge.bridge-nf-call-ip6tables', value: '1' }
-    - { name: 'net.ipv4.ip_forward', value: '1'}
+# - name: Ensure br_netfilter settings are set and persistent
+#   ansible.posix.sysctl:
+#     name: "{{ item.name }}"
+#     value: "{{ item.value }}"
+#     sysctl_set: true
+#     state: present
+#     reload: true
+#   with_items:
+#     - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+#     - { name: 'net.bridge.bridge-nf-call-ip6tables', value: '1' }
+#     - { name: 'net.ipv4.ip_forward', value: '1'}
 
-- name: Ensure overlay is available and present
-  community.general.modprobe:
-    name: overlay
-    state: present
-    persistent: present
+# - name: Ensure overlay is available and present
+#   community.general.modprobe:
+#     name: overlay
+#     state: present
+#     persistent: present
 
-- name: Ensure google cloud gpg key is present
-  ansible.builtin.get_url:
-    url: "{{ gc_gpg_keysource }}"
-    dest: "{{ gc_gpg_keystore }}"
-    mode: '0644'
-    force: true
+# - name: Ensure google cloud gpg key is present
+#   ansible.builtin.get_url:
+#     url: "{{ gc_gpg_keysource }}"
+#     dest: "{{ gc_gpg_keystore }}"
+#     mode: '0644'
+#     force: true
 
-- name: Ensure kubernetes apt repo is present
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by={{ gc_gpg_keystore }}] {{ kubernetes_apt_repo }} kubernetes-xenial main"
-    state: present
+# - name: Ensure kubernetes apt repo is present
+#   ansible.builtin.apt_repository:
+#     repo: "deb [signed-by={{ gc_gpg_keystore }}] {{ kubernetes_apt_repo }} kubernetes-xenial main"
+#     state: present
 
-- name: Ensure all required kube tools are present
-  ansible.builtin.apt:
-    name:
-      - kubelet
-      - kubeadm
-      - kubectl
-    state: present
-    update_cache: true
+# - name: Ensure all required kube tools are present
+#   ansible.builtin.apt:
+#     name:
+#       - kubelet
+#       - kubeadm
+#       - kubectl
+#     state: present
+#     update_cache: true
 
-- name: Ensure all required kube tools are held
-  ansible.builtin.dpkg_selections:
-    name: "{{ item }}"
-    selection: hold
-  with_items:
-    - kubelet
-    - kubeadm
-    - kubectl
+# - name: Ensure all required kube tools are held
+#   ansible.builtin.dpkg_selections:
+#     name: "{{ item }}"
+#     selection: hold
+#   with_items:
+#     - kubelet
+#     - kubeadm
+#     - kubectl

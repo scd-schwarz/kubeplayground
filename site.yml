@@ -1,10 +1,10 @@
 ---
-- name: Make sure host is updated and configured
-  hosts: all
-  become: true
-  roles:
-    - motd
-    - containerd
+# - name: Make sure host is updated and configured
+#   hosts: all
+#   become: true
+#   roles:
+#     - motd
+#     - containerd
 
-# - name: Run kube cluster
-#   ansible.builtin.import_playbook: kube.yml
+- name: Run kube cluster
+  ansible.builtin.import_playbook: kube.yml
