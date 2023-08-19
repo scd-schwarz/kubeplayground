@@ -41,7 +41,8 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "site.yml"
     ansible.groups = {
       "control_plane" => ["kube-master"],
-      "worker_nodes" => ["kube-worker-[1:#{vconf['workers']}]"]
+      "worker_nodes" => ["kube-worker-[1:#{vconf['workers']}]"],
+      "kube_cluster" => ["kube-master", "kube-worker-[1:#{vconf['workers']}]"]
     }
   end
 

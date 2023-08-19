@@ -2,5 +2,5 @@
 os: "ubuntu/jammy64"
 master_memory: 2096
 #workers: 3
-workers: 0
+workers: 1
 worker_memory: 1024
