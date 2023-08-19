@@ -1,0 +1,4 @@
+---
+gc_gpg_keysource: https://dl.k8s.io/apt/doc/apt-key.gpg
+gc_gpg_keystore: /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+kubernetes_apt_repo: https://apt.kubernetes.io/

@@ -1,0 +1,25 @@
+---
+- name: Ensure cni config dir is present
+  ansible.builtin.file:
+    path: "{{ k8s_configfiles }}/{{ cni_config_folder }}"
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: "0755"
+
+- name: Ensure network yml is present
+  ansible.builtin.template:
+    src: canal.yml.j2
+    dest: "{{ k8s_configfiles }}/{{ cni_config_folder }}/canal.yml"
+    owner: vagrant
+    group: vagrant
+    mode: "0755"
+
+- name: Ensure cni is present
+  become_user: vagrant
+  ansible.builtin.command: "kubectl apply -f {{ k8s_configfiles }}/{{ cni_config_folder }}/canal.yml"
+  register: kube_apply_canal_result
+  failed_when: kube_apply_canal_result.rc != 0
+  changed_when:
+    - kube_apply_canal_result.rc == 0
+    - '"created" in kube_apply_canal_result.stdout'

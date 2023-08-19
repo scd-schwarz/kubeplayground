@@ -1,0 +1,39 @@
+---
+- name: Init k8s cluster
+  ansible.builtin.shell: |
+    kubeadm init \
+      --token {{ kubeadm_token }} \
+      --apiserver-advertise-address {{ master_ip }} \
+      --pod-network-cidr {{ pod_network_cidr }} \
+      --service-cidr {{ service_cidr }}
+  register: kubeadm_init_result
+  failed_when: kubeadm_init_result.rc > 1
+  changed_when:
+    - kubeadm_init_result.rc == 0
+    - '"ERROR" not in kubeadm_init_result.stderr'
+
+- name: Make sure kuberenetes config dir is present
+  ansible.builtin.file:
+    path: ".kube/"
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: "0755"
+  when: kubeadm_init_result.rc == 0
+
+- name: Copy admin.conf to home
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: ".kube/config"
+    owner: vagrant
+    group: vagrant
+    mode: "0755"
+    remote_src: true
+  when: kubeadm_init_result.rc == 0
+
+
+- name: Make sure kuberenetes config is present on local
+  ansible.builtin.fetch:
+    src: .kube/config
+    dest: ~/.kube
+  when: kubeadm_init_result.rc == 0

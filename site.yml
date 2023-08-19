@@ -1,0 +1,22 @@
+---
+- name: Make sure host is updated, configured and k8s prerequisites are met
+  become: true
+  hosts: kube_cluster
+  roles:
+    - motd
+    - containerd
+    - k8s/prerequisites
+
+
+- name: Make sure control plane node is running with cni
+  become: true
+  hosts: control_plane
+  roles:
+    - k8s/controlplane
+    - k8s/cni
+
+- name: Make sure workers are running
+  hosts: worker_nodes
+  become: true
+  roles:
+    - k8s/worker
