@@ -2,6 +2,7 @@
 # kubeadm
 kubeadm_token: bzw6vc.iljlk73fzgbzl9v6
 master_ip: 192.168.56.10
-pod_network_cidr: 192.168.60.0/24
+pod_network_cidr: 192.168.100.0/20
+service_cidr: 192.168.112.0/20
 
 k8s_configfiles: /home/vagrant/kubeconfigs

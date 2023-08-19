@@ -8,14 +8,14 @@
     - k8s/prerequisites
 
 
-- name: Test control plane node difference
+- name: Make sure control plane node is running with cni
   become: true
   hosts: control_plane
   roles:
     - k8s/controlplane
     - k8s/cni
 
-- name: Test worker node difference
+- name: Make sure workers are running
   hosts: worker_nodes
   become: true
   roles:

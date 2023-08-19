@@ -1,9 +1,11 @@
 ---
 - name: Init k8s cluster
   ansible.builtin.shell: |
-    kubeadm init --token {{ kubeadm_token }} \
+    kubeadm init \
+      --token {{ kubeadm_token }} \
       --apiserver-advertise-address {{ master_ip }} \
-      --pod-network-cidr {{ pod_network_cidr }}
+      --pod-network-cidr {{ pod_network_cidr }} \
+      --service-cidr {{ service_cidr }}
   register: kubeadm_init_result
   failed_when: kubeadm_init_result.rc > 1
   changed_when:
