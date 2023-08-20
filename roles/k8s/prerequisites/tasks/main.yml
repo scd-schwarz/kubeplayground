@@ -79,3 +79,11 @@
     owner: vagrant
     group: vagrant
     mode: "0755"
+
+- name: Ensure hosts are known to each other by name
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: "{{ item }}"
+    line: "{{ item }}"
+    state: present
+  with_items: "{{ kube_hosts }}"

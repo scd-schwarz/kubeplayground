@@ -1,6 +1,8 @@
+#env
 .vagrant
 .vscode
 
+#terraform
 .terraform
 .terraform.lock.hcl
 *.tfstate

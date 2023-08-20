@@ -2,3 +2,8 @@
 gc_gpg_keysource: https://dl.k8s.io/apt/doc/apt-key.gpg
 gc_gpg_keystore: /etc/apt/keyrings/kubernetes-archive-keyring.gpg
 kubernetes_apt_repo: https://apt.kubernetes.io/
+kube_hosts:
+  - "192.168.56.10 kube-master"
+  - "192.168.56.11 kube-worker-1"
+  - "192.168.56.12 kube-worker-2"
+  - "192.168.56.13 kube-worker-3"
